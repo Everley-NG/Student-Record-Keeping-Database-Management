@@ -1,0 +1,257 @@
+-- ---------------------------------------------------------------
+-- Title: Student Record Keeping Database SQL Statements Document
+-- Author: Hoi Hin (Everley) Ng
+-- Date: 2021-12-12
+-- ---------------------------------------------------------------
+
+-- Create the student record keeping database:
+create database student_record_db;
+USE student_record_db
+
+-- Create the student record keeping database tables:
+CREATE TABLE major (
+    major_id int, 
+    major_name varchar (255),
+    PRIMARY KEY (major_id)
+);
+
+CREATE TABLE minor (
+    minor_id int, 
+    minor_name varchar (255),
+    PRIMARY KEY (minor_id)
+);
+
+CREATE TABLE scholarship (
+    scholarship_id int, 
+    scholarship_amount int, 
+    scholarship_name varchar(255),
+    PRIMARY KEY (scholarship_id)
+);
+
+CREATE TABLE student (
+    student_id int, 
+    last_name varchar (255),
+    first_name varchar (255),
+    major_id int,
+    minor_id int,
+    scholarship_id int,
+    international_student boolean,
+    admission_year year,
+    PRIMARY KEY (student_id),
+    FOREIGN KEY (major_id) REFERENCES major (major_id),
+    FOREIGN KEY (minor_id) REFERENCES minor (minor_id),
+    FOREIGN KEY (scholarship_id) REFERENCES scholarship (scholarship_id)
+);
+
+CREATE TABLE contact_info (
+    contact_id int,
+    student_id int,
+    address varchar (255),
+    phone_number varchar(255),
+    email varchar (255)
+    PRIMARY KEY(contact_id),
+    FOREIGN KEY (student_id) REFERENCES student (student_id)
+    );
+
+CREATE TABLE course (
+    course_id int, 
+    course_name varchar(255), 
+    major_id int, 
+    minor_id int
+    PRIMARY KEY (course_id),
+    FOREIGN KEY (major_id) REFERENCES major (major_id),
+    FOREIGN KEY (minor_id) REFERENCES minor (minor_id)
+);
+
+CREATE TABLE enrollment (
+    course_id int, 
+    student_id int, 
+    grade int, 
+    attendance_information int 
+    PRIMARY KEY (course_id, student_id),
+    FOREIGN KEY (course_id) REFERENCES course (course_id),
+    FOREIGN KEY (student_id) REFERENCES student (student_id)
+);
+
+-- Major SQL insert statement:
+insert into Major(major_id, major_name)
+-- Computer Science - 1
+values(1, “Computer Science”);
+-- Business - 2
+values(2, “Business Administration”);
+
+-- Minor SQL insert statement:
+insert into Minor(minor_id, minor_name)
+-- Computer Science - 1
+values(1, “Computer Science”);
+-- Business - 2
+values(2, “Business Administration”);
+-- User Experience Design - 3
+values(3, “User Experience Design”);
+
+-- Course SQL insert statement:
+insert into Course(course_id, course_name, major_id, minor_id)
+-- Computer Science - 1
+values
+(1, “Info Processing With Micros”, NULL, 1),
+(2, “Intro To Programming”, 1, 1),
+(3, “Data Structures I”, 1, 1),
+(4, “Web Site Design”, NULL, 1),
+(5, “Windows App. Programming”, 1, 1),
+(6, “Object-Oriented Programming”, 1, 1),
+(7, “Discrete Struct for Comp Sci”, 1, 1),
+(8, “Intro to Microprocessors”, 1, 1),
+(9, “Digital Electronics”, 1, 1),
+(10, “Data Structures II”, 1, 1),
+(11, “Algorithm Design/Analysis I”, 1, NULL),
+(12, “Software Engineering”, 1, NULL),
+(13, “Digital System Design”, 1, NULL),
+(14, “Physical Computing”, 1, NULL);
+-- Business - 2
+values
+(15, “Understanding Bus. Environment”, 2, 2),
+(16, “Intro to Financial Accounting”, 2, 2),
+(17, “Interpersonal Communication”, 2, 2),
+(18, “Fundamentals of Finance”, 2, 2),
+(19, “Fundamentals of Operations”, 2, 2),
+(20, “Business Law”, 2, 2),
+(21, “Intro. to Marketing Management”, 2, NULL);
+-- User Experience Design - 3
+values
+(22, “Design Thinking I: Foundations”, NULL, 3),
+(23, “Information Design”, NULL, 3),
+(24, “Interaction Design I”, NULL, 3),
+(25, “Design of Immersive Spaces”, NULL, 3),
+(26, “Designing for EDI”, NULL, 3);
+
+-- Enrollment SQL insert statement:
+Insert into enrollment (course_id, student_id, grade, attendance_information)
+Values
+( 8, 1, 47, 95 ),
+( 9, 1, 77, 92 ),
+( 5, 1, 71, 73 ),
+(12 , 1, 90, 100 ),
+(11, 2, 58, 58 ),
+( 18, 2, 78, 76 ),
+( 24, 2, 96, 64 ),
+( 20, 2, 69, 81 ),
+( 25, 2, 96, 86 ),
+(14, 3, 42, 90 ),
+( 5, 3, 72, 67 ),
+(19, 3, 77, 85 ),
+(1 , 4, 91, 46 ),
+(22, 4, 62, 42 ),
+(15, 4, 86, 81 ),
+(7 , 5, 48, 97 ),
+(8 , 5, 77, 46 ),
+(9 , 5, 70, 50 ),
+(10 , 5, 83, 61 ),
+(17, 6, 64, 66 ),
+(13, 6, 98, 87 ),
+(14, 6, 80, 72 ),
+(16, 6, 64, 88 ),
+(4, 7, 42, 83 ),
+(5, 7, 48, 46 ),
+(20, 7, 89, 70 ),
+(1, 8, 91, 88 ),
+(3, 8, 79, 80 ),
+(4, 8, 42, 62 ),
+(23, 8, 88, 44 ),
+(25, 8, 65, 87 ),
+(17, 9, 82, 99 ),
+(23, 9, 45, 74 ),
+(24, 9, 88, 49 ),
+(15, 10, 48, 54 ),
+(16, 10, 92, 93 ),
+(17, 10, 64, 57 ),
+(18, 10, 73, 43 ),
+(19, 10, 72, 61 );
+
+-- Student SQL insert statement:
+insert into Student(student_id, last_name, first_name, admission_year, major_id, minor_id, scholarship_id, international_student)
+values
+(1, “James”, “Smith”, 2019, 1, NULL, 4, TRUE),
+(2, “Robert”, “Jones”, 2017, 2, 3, NULL, FALSE),
+(3, “John”, “Miller”, 2019, 1, 2, NULL, TRUE),
+(4, “Michael”, “Davis”, 2018, NULL, NULL, 2 , TRUE),
+(5, “William”, “Lopez”, 2016, 1, NULL, 1, FALSE),
+(6, “David”, “Brown”, 2021, 1, 2, 3, FALSE),
+(7, “Richard”, “Thomas”, 2020, 1, 2, NULL, FALSE),
+(8, “Joseph”, “Moore”, 2021, 1, 3, NULL, FALSE),
+(9, “Thomas”, “Taylor”, 2020, 2, 1, NULL, FALSE),
+(10, “Charles”, “Lee”, 2021, 2, NULL, 2, TRUE);
+
+-- scholarship SQL insert statement:
+insert into scholarship (scholarship_id, scholarship_amount, scholarship_name)
+values
+(1, 500, "Steve Adams Scholarship"),
+(2, 1000, "Mike Daniles Scholarship"),
+(3, 2000, "Mark Zuckerberg Scholarship"),
+(4, 3000, "Wilfrid Laurier Scholarship");
+
+-- Contact_info SQL insert statement:
+Insert into contact_info(contact_id, student_id, address, phone_number, email)
+values
+(1, 1, “88 jumper st. , Toronto, On. ON N23 1X5”, “196-946-7314”, “j_smith@mylaurier.ca”),
+(2, 2,“Line 49, Brunner, ON N0K 1C0”, “236-303-9698”, “r_jones@mylaurier.ca”),
+(3, 3,“4712 Line 67, Milverton, ON N0K 1M0”, “242-999-3952”, “j_miller@mylaurier.ca”),
+(4, 4,“16 Mill St W, Milverton, ON N0K 1M0”, “300-890-5713”, “m_davis@mylaurier.ca”),
+(5, 5 ,“1206 Snyder's Rd W, New Hamburg, ON N3A 1A4”, “653-305-2684”, “w_lopez@mylaurier.ca”),
+(6, 6,“560 Snyder's Rd E, Baden, ON N3A 3L1”, “548-551-1321”, “d_brown@mylaurier.ca”),
+(7, 7, “751 Pasture Rose St, Waterloo, ON N2V 0C2“, “226-998-0090”, “r_tho@mylaurier.ca”),
+(8, 8, “710 Laurelwood Dr, Waterloo, ON N2V 2V3”, “213-599-1010”, “j_moo@mylaurier.ca”),
+(9, 9, “200 Ring Rd, Waterloo, ON N2L 3G1”, “876-443-1010”, “taylor@mylaurier.ca”),
+(10, 10, “719 Erbsville Rd, Waterloo, ON N2J 3Z4”, “718-858-9876”, “lee@mylaurier.ca”);
+
+-- Tasks
+-- SELECT all students who are in computer science major
+SELECT student_id, last_name, first_name 
+FROM student
+WHERE major_id IN (SELECT major_id 
+FROM major
+WHERE major_name = “Computer Science” );
+
+-- SELECT all courses for business administration major
+SELECT course_id, course_name
+FROM course
+WHERE major_id IN (Select major_id 
+FROM major
+WHERE major_name = “Business Administration”);
+
+-- SELECT all courses for user experience design minor
+SELECT course_id, course_name
+FROM course
+WHERE minor_id IN (Select minor_id 
+FROM minor
+WHERE minor_name = “User Experience Design”);
+
+-- SELECT all students in the course Interpersonal communication
+SELECT s.student_id, s.last_name, s.first_name, c.course_name
+FROM student s, course c, enrollment e
+WHERE c.course_name = “Interpersonal Communication” AND c.course_id = e.course_id AND s.student_id = e.student_id;
+
+-- SELECT all students with a scholarship and the amount
+SELECT s.student_id, s.last_name, s.first_name, sc.scholarship_amount, sc.scholarship_name
+FROM student s, scholarship sc
+WHERE s.scholarship_id = sc.scholarship_id;
+
+-- SELECT all students and join their contact info
+SELECT student.student_id, student.last_name, student.first_name, contact_info.address, contact_info.email, contact_info.phone_number
+FROM student
+INNER JOIN contact_info ON student.student_id = contact_info.student_id; 
+
+
+-- SELECT all students, there courses and grades + attendance in each course
+SELECT s.student_id, s.last_name, s.first_name, c.course_id, c.course_name, e.grade, e.attendance_information
+FROM student s, course c, enrollment e
+WHERE c.course_id = e.course_id AND s.student_id = e.student_id;
+
+-- SELECT all students with a major and minor
+SELECT s.student_id, s.last_name, s.first_name, m.major_name, mi.minor_name
+FROM student s, major m, minor mi
+WHERE s.major_id = m.major_id AND s.minor_id = mi.minor_id;
+
+-- SELECT all students with an admission year before 2020
+SELECT student_id, last_name, first_name, admission_year
+FROM student
+WHERE admission_year < 2020;
